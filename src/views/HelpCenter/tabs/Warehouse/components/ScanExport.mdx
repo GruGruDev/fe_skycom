@@ -1,0 +1,26 @@
+import ArrowRightAltIcon from "@mui/icons-material/ArrowRightAlt";
+
+##### Tính năng quét để xuất hàng
+
+<br />
+
+- Tính năng quét xuất hàng là quét và xác nhận phiếu xuất hàng của những đơn hàng đang có trạng thái **Chờ giao hàng**.
+- Điều kiện để sử dụng tính năng quét xuất hàng: 1. Đơn hàng đã có trong danh sách Chờ giao hàng và đã in phiếu giao hàng. 2. Kết nối máy quét mã vạch đơn hàng.
+- Quy trình thao tác:
+
+  - Bước 1: Truy cập Kho > Quản lý Kho > chọn mục Phiếu Xuất. Nhấn chọn nút “Quét mã” để tiến hành quét mã vạch đơn hàng.
+  - Bước 2: Quét vào Mã đơn hàng trên phiếu giao hàng bằng máy quét
+
+    - Sau khi quét mã hệ thống sẽ hiển thị mã đơn hàng. Nhấn chọn **“Xác nhận”** để xác nhận quét xuất đơn hàng. Hệ thống sẽ hiển thị **“Quét thành công”** kho mã đơn quét thành công.
+
+      > Lưu ý: Mỗi mã đơn hàng chỉ có thể quét Xuất một lần, nếu đơn hàng quét xuất lần hai hệ thống sẽ thông báo **“Đơn hàng trùng”**
+
+    - Đơn hàng sau khi quét xuất thành công sẽ chuyển trạng thái đơn thành **“Đang giao hàng”**, đồng thời Phiếu xuất kho của đơn hàng đó được xác nhận.
+
+> Lưu ý: Phiếu xuất kho được hệ thống tạo tự động khi đơn hàng tạo thành công phiếu giao hàng.
+
+- Phiếu xuất xác nhận, hệ thống sẽ tự động trừ tồn kho của sản phẩm.
+
+<ArrowRightAltIcon sx={{ verticalAlign: "bottom" }} /> Bạn có thể xem Lịch sử quét tại: Kho <ArrowRightAltIcon
+  sx={{ verticalAlign: "bottom" }}
+/> Quản lý Kho <ArrowRightAltIcon sx={{ verticalAlign: "bottom" }} /> chọn mục Lịch Sử Quét

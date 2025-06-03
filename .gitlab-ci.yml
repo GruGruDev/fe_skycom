@@ -1,0 +1,57 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  TAM_TAG_IMAGE_PROD: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/$CI_PROJECT_NAME/tam_prod_$CI_COMMIT_SHA
+
+# ------------------------------- TAM ------------------------------------------------------------------
+# prod
+build_k8s_tam_prod:
+  image:
+    name: gcr.io/kaniko-project/executor:v1.23.0-debug
+    entrypoint: [""]
+  variables:
+    GODEBUG: "http2client=0"
+  services:
+    - docker:24.0.5-dind
+  stage: build
+  script:
+    # Make env file
+    - chmod +x ./k8s_tam/prod/setup_env.sh
+    - ./k8s_tam/prod/setup_env.sh
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"$(echo -n $CI_DEPENDENCY_PROXY_SERVER | awk -F[:] '{print $1}')\":{\"auth\":\"$(printf "%s:%s" ${CI_DEPENDENCY_PROXY_USER} "${CI_DEPENDENCY_PROXY_PASSWORD}" | base64 | tr -d '\n')\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/k8s_tam/prod/Dockerfile"
+      --destination "${TAM_TAG_IMAGE_PROD}"
+  only:
+    - k8s-tam/main
+  tags:
+    - k8s-runner-react
+
+deploy_k8s_tam_prod:
+  image:
+    name: bitnami/kubectl:1.29
+    entrypoint: [""]
+  stage: deploy
+  before_script:
+    - cat "$K8S_ONPREM_CA" > k8s-ca.crt
+    - cat "$K8S_ONPREM_CI_DEV_KEY" > ci-dev.key
+    # setting up k8s cred
+    - kubectl config set-cluster skycom-cluster --server="$K8S_ONPREM_URL" --insecure-skip-tls-verify=true
+    - kubectl config set-credentials ci-dev --client-certificate=./k8s-ca.crt --client-key=./ci-dev.key
+    - kubectl config set-context ci-dev-context --cluster=skycom-cluster --user=ci-dev
+    - kubectl config use-context ci-dev-context
+  script:
+    # Update deployment file
+    - sed -i "s#<IMAGE>#${TAM_TAG_IMAGE_PROD}#" ./k8s_tam/prod/server/app.yml
+    # Deploy to k8s self-host
+    - kubectl apply -f ./k8s_tam/prod/server/app.yml
+  only:
+    - k8s-tam/main
+  when: manual
+  needs:
+    - build_k8s_tam_prod
+  tags:
+    - k8s-runner-react

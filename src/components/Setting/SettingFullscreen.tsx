@@ -1,0 +1,41 @@
+import FullscreenIcon from "@mui/icons-material/Fullscreen";
+import FullscreenExitIcon from "@mui/icons-material/FullscreenExit";
+import Button from "@mui/material/Button";
+import { alpha } from "@mui/material/styles";
+import { useState } from "react";
+
+// ----------------------------------------------------------------------
+
+export function SettingFullscreen() {
+  const [fullscreen, setFullscreen] = useState(false);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen();
+      setFullscreen(true);
+    } else if (document.exitFullscreen) {
+      document.exitFullscreen();
+      setFullscreen(false);
+    }
+  };
+
+  return (
+    <Button
+      fullWidth
+      size="large"
+      variant="outlined"
+      color={fullscreen ? "primary" : "inherit"}
+      startIcon={fullscreen ? <FullscreenExitIcon /> : <FullscreenIcon />}
+      onClick={toggleFullScreen}
+      sx={{
+        fontSize: "0.82rem",
+        ...(fullscreen && {
+          bgcolor: (theme) =>
+            alpha(theme.palette.primary.main, theme.palette.action.selectedOpacity),
+        }),
+      }}
+    >
+      {fullscreen ? "Exit Fullscreen" : "Fullscreen"}
+    </Button>
+  );
+}
