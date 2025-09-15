@@ -13,6 +13,12 @@ const selectorStyle = { width: 180, marginTop: 4 };
 const TOTAL_INVENTORY_MAX = 100;
 const INVENTORY_STEP = 1;
 
+const PRODUCT_INVENTORY_OPTIONS = [
+  { label: "Tất cả", value: "all" },
+  { label: "Còn hàng", value: "in_stock" },
+  { label: "Hết hàng", value: "out_of_stock" },
+];
+
 export const filterOptions = ({
   category = [],
   supplier = [],
@@ -90,6 +96,18 @@ export const filterOptions = ({
           },
         }
       : null,
+    {
+      key: "inventory_status",
+      type: "select",
+      multiSelectProps: {
+        onChange: (value) => onChange("inventory_status")(value),
+        options: PRODUCT_INVENTORY_OPTIONS,
+        title: "Trạng thái tồn kho",
+        value: revertFromQueryForSelector(params?.inventory_status),
+        style: selectorStyle,
+        selectorId: "inventory_status",
+      },
+    },
     {
       type: "slider",
       key: "total_inventory",
