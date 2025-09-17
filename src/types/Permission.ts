@@ -1,3 +1,5 @@
+// src/types/Permission.ts
+
 import { ROLE_TAB, ROLE_TYPE } from "constants/role";
 
 export interface TPermission {
@@ -16,4 +18,5 @@ export interface TRole {
   name: string;
   default_router: string;
   data: any;
+  permissions: string[]; // <-- Đây là dòng quan trọng cần thêm vào
 }

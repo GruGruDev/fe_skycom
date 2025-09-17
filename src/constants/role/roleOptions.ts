@@ -67,6 +67,11 @@ export const ROLE_OPTIONS: TGroupPermission[] = [
         label: ROLE_LABEL.export_excel,
         isShowRadioReadWrite: false,
       },
+      {
+        name: ROLE_PRODUCT.VIEW_VARIANT_IMAGE, // Quyền mới được thêm
+        label: "Xem hình ảnh biến thể",
+        isShowRadioReadWrite: false,
+      },
     ],
   },
   {

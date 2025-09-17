@@ -94,6 +94,7 @@ export enum ROLE_CUSTOMER {
 export enum ROLE_PRODUCT {
   EXPORT_EXCEL = "export-excel",
   HANDLE = "handle",
+  VIEW_VARIANT_IMAGE = "products.view_variant_image",
 }
 
 export enum ROLE_ATTRIBUTE {

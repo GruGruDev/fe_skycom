@@ -73,10 +73,12 @@ const SortChip = ({ columnShowSort, params, setParams, sortColumns }: SortProps)
   };
 
   return (
-    <Grid container xs={12} justifyContent={"end"}>
+    // Sửa lỗi: Xóa prop `xs={12}` khỏi Grid container
+    <Grid container justifyContent={"end"}>
       {params?.ordering
         ? map(multiOrdering, (orderingValue, index) => (
             <Chip
+              key={index}
               size="small"
               onClick={() =>
                 handleChangeOrdering(

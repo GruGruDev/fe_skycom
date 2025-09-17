@@ -1,9 +1,12 @@
 import { DataTypeProvider, FilterOperation } from "@devexpress/dx-react-grid";
+import { Box } from "@mui/material";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import HandlerImage from "components/Images/HandlerImage";
 import { GridLineLabel, Span } from "components/Texts";
 import { PRODUCT_LABEL } from "constants/product/label";
+import { ROLE_PRODUCT } from "constants/role";
+import useAuth from "hooks/useAuth";
 import { TComboVariant, VARIANT_TYPE } from "types/Product";
 import { TStyles } from "types/Styles";
 import { redirectVariantUrl } from "utils/product/redirectUrl";
@@ -23,6 +26,10 @@ interface Props {
 const GeneralInfoColumn = ({ for: columnNames = [], ...props }: Props) => {
   const Formatter = ({ row = {} }: { row?: Partial<TComboVariant> }) => {
     const { name, SKU_code, bar_code, id, images, type, quantity } = row;
+    const { user } = useAuth();
+
+    // Sửa lỗi: truy cập permissions từ user.role.permissions
+    const canViewImage = user?.role?.permissions?.includes(ROLE_PRODUCT.VIEW_VARIANT_IMAGE);
 
     return (
       <Stack spacing={2} direction="row" alignItems="center">
@@ -32,14 +39,18 @@ const GeneralInfoColumn = ({ for: columnNames = [], ...props }: Props) => {
               {quantity}
             </Span>
           )}
-          <HandlerImage
-            width={71}
-            height={72}
-            preview
-            style={styles.image}
-            value={images}
-            onlyOne
-          />
+          {canViewImage ? (
+            <HandlerImage
+              width={71}
+              height={72}
+              preview
+              style={styles.image}
+              value={images}
+              onlyOne
+            />
+          ) : (
+            <Box sx={{ width: 71, height: 72, backgroundColor: "neutral.200", borderRadius: 1 }} />
+          )}
         </Stack>
         <Stack spacing={0.5}>
           {type === VARIANT_TYPE.COMBO && (
