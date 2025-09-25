@@ -2,10 +2,11 @@ import { Box } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import { Theme, styled, useTheme } from "@mui/material/styles";
 import { ProgressBarStyle } from "components/Loadings";
+import { PageWithTitle } from "components/Page";
 import { ScrollToTop } from "components/Scrolls";
 import { Settings } from "components/Setting";
-import { BOTTOM_PAGE_HEIGHT } from "constants/index";
-import { COLLAPSE_WIDTH, DRAWER_WIDTH, HEADER } from "constants/index";
+import { BOTTOM_PAGE_HEIGHT, COLLAPSE_WIDTH, DRAWER_WIDTH, HEADER } from "constants/index";
+import { LABEL } from "constants/label";
 import useResponsive from "hooks/useResponsive";
 import useSettings from "hooks/useSettings";
 import { useState } from "react";
@@ -15,8 +16,6 @@ import { ThemeLayout } from "types/Setting";
 import DashboardSidebar from "./DashboardSidebar";
 import DashboardHeader from "./Header";
 import NavbarHorizontal from "./navbar/NavbarHorizontal";
-import { PageWithTitle } from "components/Page";
-import { LABEL } from "constants/label";
 
 const RootStyle = styled("div")({
   display: "flex",
@@ -132,7 +131,7 @@ export default function DashboardLayout() {
       {isHorizontalLayout ? horizontalLayout : verticalLayout}
       {isDesktop && (
         <Footer themeLayout={themeLayout} theme={theme}>
-          Developed by <b>Skycom Enterprise</b>
+          Developed by <b>Tam Luxury</b>
         </Footer>
       )}
     </>
